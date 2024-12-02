@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-
 {% extends 'base.html' %}
 {% block content %}
 <div class="container bg-gray-700 shadow-md rounded-lg mb-6 mx-auto p-6 flex">
-    <!-- Gambar Motor -->
+    <!-- Gambar Kendaraan -->
     <div class="w-2/5">
-        <img src="{{ motor.gambar.url }}" style="height: auto; width: 100%; object-fit: contain;" alt="Motor Image" />
+        <img src="{{ kendaraan.gambar.url }}" style="height: auto; width: 100%; object-fit: contain;"
+            alt="Kendaraan Image" />
     </div>
 
-    <!-- Detail Motor -->
+    <!-- Detail Kendaraan -->
     <div class="w-3/5 ml-6">
-        <h1 class="text-3xl font-bold text-primary mb-4">{{ motor.nama }}</h1>
-        <p class="mb-2"><strong>Deskripsi:</strong> {{ motor.deskripsi }}</p>
+        <h1 class="text-3xl font-bold text-primary mb-4">{{ kendaraan.nama }}</h1>
+        <p class="mb-2"><strong>Deskripsi:</strong> {{ kendaraan.deskripsi }}</p>
         <p class="mb-4">
             <strong>Stok:</strong>
-            <span class="text-green-500">{{ motor.stok }}</span>
+            <span class="text-green-500">{{ kendaraan.stok }}</span>
         </p>
 
         {% if pesan_berhasil %}
@@ -26,7 +26,7 @@
 </div>
 
 <!-- Form Peminjaman -->
-{% if motor.stok > 0 %}
+{% if kendaraan.stok > 0 %}
 <div class="container bg-gray-700 shadow-md rounded-lg p-6 mx-auto">
     <h2 class="text-2xl font-semibold text-primary mb-4">Form Peminjaman</h2>
     <form method="post">

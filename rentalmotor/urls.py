@@ -24,7 +24,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', rentalView.home, name='home'),
     path('about/', rentalView.about, name='about'),
-    path('detail/<int:motor_id>/', rentalView.detail, name='detail'),
+    path('detail/<int:kendaraan_id>/', rentalView.detail, name='detail'),
+    path('search/', rentalView.search, name='search'), 
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

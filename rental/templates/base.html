@@ -1,16 +1,16 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html data-theme="dark">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RENTALMOTORS</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
 
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
@@ -21,8 +21,7 @@
                 <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
                     RENTAL <span class="text-blue-800">MOTORS</span>
                 </div>
-                <ul tabindex="0"
-                    class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                     <li><a href="{% url 'home' %}"> Home</a></li>
                     <li><a href="{% url 'about' %}"> About </a></li>
                 </ul>
@@ -33,14 +32,26 @@
             <ul class="menu menu-horizontal px-1">
                 <li><a href="{% url 'home' %}"> Home</a></li>
                 <li><a href="{% url 'about' %}"> About </a></li>
-
             </ul>
         </div>
         <div class="navbar-end">
-            <a class="btn">ADMIN</a>
+            <!-- Ikon media sosial -->
+            <a href="https://www.tiktok.com" target="_blank" class="btn btn-ghost">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/TikTok_logo_2021.svg" alt="TikTok"
+                    class="w-6 h-6">
+            </a>
+            <a href="https://www.instagram.com" target="_blank" class="btn btn-ghost mx-2">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Instagram_logo_2022.svg" alt="Instagram"
+                    class="w-6 h-6">
+            </a>
+            <a href="https://www.facebook.com" target="_blank" class="btn btn-ghost">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook"
+                    class="w-6 h-6">
+            </a>
         </div>
     </div>
- 
+
+
     <div class="container">
         {% block content %}
         {% endblock %}

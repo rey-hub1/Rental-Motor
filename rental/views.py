@@ -1,67 +1,83 @@
 from django.shortcuts import get_object_or_404, render
-from .models import Merek, Motor, Peminjaman
+from .models import Merek, Kendaraan, Peminjaman
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from datetime import datetime
 import locale
 
-locale.setlocale(locale.LC_ALL, 'id_ID.UFT-8')
+# Atur locale untuk format mata uang dan tanggal
+locale.setlocale(locale.LC_ALL, 'id_ID.UTF-8')
 
-# Create your views here.
+# Home view - Menampilkan kendaraan dengan filter kategori
 def home(request):
-    nama =request.GET.get('motor')
-    if nama :
-        motors = Motor.objects.filter(nama__icontains=nama)
-    else    :
-        motors = Motor.objects.all()
-    print(motors)
-    return render(request, 'home.html', {'motors': motors})
+    kendaraan_promo = Kendaraan.objects.filter(promo_aktif='aktif')  # Kendaraan dengan promo aktif
+    kendaraan_mobil = Kendaraan.objects.filter(kategori='mobil')
+    kendaraan_motor = Kendaraan.objects.filter(kategori='motor')
 
+    context = {
+        'kendaraan_promo': kendaraan_promo,
+        'kendaraan_mobil': kendaraan_mobil,
+        'kendaraan_motor': kendaraan_motor,
+    }
+    return render(request, 'home.html', context)
+
+# About page - Menampilkan halaman tentang
 def about(request):
     return render(request, 'about.html')
-def detail(request, motor_id):
-    motor = get_object_or_404(Motor, pk=motor_id)
+
+# Detail view - Menampilkan detail kendaraan dan memproses peminjaman
+def detail(request, kendaraan_id):
+    kendaraan = get_object_or_404(Kendaraan, pk=kendaraan_id)
     pesan_berhasil = None
-    jumlah_bayar = None
-    context = {
-        'motor': motor,
-        'pesan_berhasil': pesan_berhasil,
-        'jumlah_bayar': jumlah_bayar
-    }
 
     if request.method == 'POST':
+        # Ambil data dari form
         nik = request.POST.get('nik')
         nama_peminjam = request.POST.get('nama_peminjam')
         tanggal_pinjam = datetime.strptime(request.POST.get('tanggal_pinjam'), "%Y-%m-%d")
         tanggal_kembali = datetime.strptime(request.POST.get('tanggal_kembali'), "%Y-%m-%d")
 
+        # Hitung durasi peminjaman
         durasi_peminjaman = (tanggal_kembali - tanggal_pinjam).days
-
         if durasi_peminjaman <= 0:
-            pesan_berhasil = "TANGGAL KEMBALI HARUS LEBIH BESAR"
-            context['pesan_berhasil'] = pesan_berhasil
-            return render(request, 'detail.html', context)
+            return render(request, 'detail.html', {
+                'kendaraan': kendaraan,
+                'pesan_berhasil': "Tanggal kembali harus lebih besar dari tanggal pinjam.",
+            })
 
-        jumlah_bayar = motor.harga_per_hari * durasi_peminjaman
+        # Hitung jumlah bayar
+        harga_harian = kendaraan.harga_promo if kendaraan.promo_aktif == 'aktif' else kendaraan.harga_per_hari
+        jumlah_bayar = harga_harian * durasi_peminjaman
         jumlah_bayar_rupiah = locale.currency(jumlah_bayar, grouping=True)
 
-        # OBJEK PEMINJAMAN BARU
-        peminjam = Peminjaman(
+        # Simpan peminjaman
+        peminjaman = Peminjaman(
+            kendaraan=kendaraan,
             nik=nik,
             nama_peminjam=nama_peminjam,
-            motor=motor,
             tanggal_pinjam=tanggal_pinjam,
             tanggal_kembali=tanggal_kembali,
             jumlah_bayar=jumlah_bayar,
         )
-        peminjam.save()
+        peminjaman.save()
 
-        # -1 stok motor
-        motor.stok -= 1
-        motor.save()
+        # Kurangi stok kendaraan
+        kendaraan.stok -= 1
+        kendaraan.save()
 
-        pesan_berhasil = f"Terima kasih telah mempercayai produk kami. Silakan datang ke tempat untuk melakukan peminjaman. Total bayar: {jumlah_bayar_rupiah}."
-        context['pesan_berhasil'] = pesan_berhasil
+        pesan_berhasil = f"Terima kasih telah melakukan peminjaman. Total yang harus dibayar: {jumlah_bayar_rupiah}."
 
-    # Selalu render template dengan konteks
-    return render(request, 'detail.html', context)
+    return render(request, 'detail.html', {
+        'kendaraan': kendaraan,
+        'pesan_berhasil': pesan_berhasil,
+    })
+
+def search(request):
+    query = request.GET.get('search', '')  # Ambil parameter "search" dari URL
+    results = Kendaraan.objects.filter(nama__icontains=query) if query else []
+
+    context = {
+        'query': query,
+        'results': results,
+    }
+    return render(request, 'search_results.html', context)
