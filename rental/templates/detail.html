@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+
+{% extends 'base.html' %}
+{% block content %}
+<div class="container bg-gray-700 shadow-md rounded-lg mb-6 mx-auto p-6 flex">
+    <!-- Gambar Motor -->
+    <div class="w-2/5">
+        <img src="{{ motor.gambar.url }}" style="height: auto; width: 100%; object-fit: contain;" alt="Motor Image" />
+    </div>
+
+    <!-- Detail Motor -->
+    <div class="w-3/5 ml-6">
+        <h1 class="text-3xl font-bold text-primary mb-4">{{ motor.nama }}</h1>
+        <p class="mb-2"><strong>Deskripsi:</strong> {{ motor.deskripsi }}</p>
+        <p class="mb-4">
+            <strong>Stok:</strong>
+            <span class="text-green-500">{{ motor.stok }}</span>
+        </p>
+
+        {% if pesan_berhasil %}
+        <div class="alert alert-success">
+            {{ pesan_berhasil }}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Form Peminjaman -->
+{% if motor.stok > 0 %}
+<div class="container bg-gray-700 shadow-md rounded-lg p-6 mx-auto">
+    <h2 class="text-2xl font-semibold text-primary mb-4">Form Peminjaman</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-control w-full max-w-lg mb-4">
+            <label for="id_nik" class="label">
+                <span class="label-text">NIK</span>
+            </label>
+            <input type="text" name="nik" id="id_nik" class="input input-bordered w-full" required />
+        </div>
+        <div class="form-control w-full max-w-lg mb-4">
+            <label for="id_nama_peminjam" class="label">
+                <span class="label-text">Nama Peminjam</span>
+            </label>
+            <input type="text" name="nama_peminjam" id="id_nama_peminjam" class="input input-bordered w-full"
+                required />
+        </div>
+        <div class="form-control w-full max-w-lg mb-4">
+            <label for="id_tanggal_pinjam" class="label">
+                <span class="label-text">Tanggal Pinjam</span>
+            </label>
+            <input type="date" name="tanggal_pinjam" id="id_tanggal_pinjam" class="input input-bordered w-full"
+                required />
+        </div>
+        <div class="form-control w-full max-w-lg mb-4">
+            <label for="id_tanggal_kembali" class="label">
+                <span class="label-text">Tanggal Kembali</span>
+            </label>
+            <input type="date" name="tanggal_kembali" id="id_tanggal_kembali" class="input input-bordered w-full"
+                required />
+        </div>
+        <button type="submit" class="btn btn-primary w-full max-w-lg">Pinjam</button>
+    </form>
+</div>
+{% else %}
+<div class="container alert alert-error mx-auto">
+    Stok tidak tersedia saat ini. Silakan cek kembali nanti.
+</div>
+{% endif %}
+{% endblock %}

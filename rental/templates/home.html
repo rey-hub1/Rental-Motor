@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Hero Section -->
+
+
+<!-- Hero Section -->
+<!-- component -->
+<!-- start -->
+<div class="container flex flex-col justify-center items-center mx-auto my-8 py-10">
+    <div style="background-image: url(https://images.unsplash.com/photo-1538582709238-0a503bd5ae04?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80)"
+        class="max-w-5xl bg-gray-300 h-64 w-full rounded-lg shadow-md bg-cover bg-center">
+    </div>
+
+    <!-- Card -->
+    <div class="bg-blue-50 -mt-24 shadow-md rounded-lg overflow-hidden">
+        <div class="items-center justify-between py-10 px-20 shadow-2xl rounded-lg mx-auto text-center">
+            <div class="px-2 -mt-6">
+                <div class="text-center">
+                    <h2 class="font-normal text-2xl text-grey-800 leading-loose my-3 w-full">
+                        Cari Motor Favorit Anda
+                    </h2>
+                    <div class="w-full text-center">
+                        <form action="">
+                            <div class="max-w-sm mx-auto p-1 pr-0 flex items-center">
+                                <input type="text" name="motor" placeholder="Motor Favorit Anda"
+                                    class="flex-1  appearance-none rounded shadow p-4 px-8 text-grey-dark mr-2 focus:outline-none">
+                                <button type="submit"
+                                    class="bg-blue-600 text-white text-base font-semibold rounded-md shadow-md hover:bg-indigo-600 p-3">Get
+                                    started</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end card -->
+
+</div>
+<!-- end -->
+
+<div class="grid grid-cols-3 gap-4">
+{% for motor in motors %}
+    <div class="card card-compact bg-base-100 w-96 shadow-xl">
+        <figure>
+            <img src="{{motor.gambar.url}}" style="height: 250px;" alt="Shoes" />
+        </figure>
+        <div class="card-body">
+            <h2 class="card-title">{{motor.nama.upper}}</h2>
+            <p>{{motor.deskripsi}}</p>
+            <div class="card-actions justify-end">
+                <a href="/detail/{{motor.id}}">
+                <button class="btn btn-primary">Sewa Yuk</button>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock %}
